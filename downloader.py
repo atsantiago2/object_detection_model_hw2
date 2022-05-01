@@ -98,11 +98,25 @@ def get_drinks_dataset(filename = 'drinks.tar.gz', filesize = 146820533):
 
 
 	
+def get_model(filename = 'proj2_model.pth', filesize = 178134000):
+	file_id = '1vrFeocZ7TA88mdfzUoPCCSbMxrHfBwIe'
+
+
+	# Check Data Set File Status
+	destination = filename
+	if filecheck(destination, filesize):
+		print("Data Set Already Downloaded")
+	else:
+		print("Downloading Data Set")
+		download_file_from_google_drive(file_id, destination)
+
+	return True
 
 
 
 if __name__ == "__main__":
 	file_id = id
-	get_drinks_dataset()
+	get_model()
+	# get_drinks_dataset()
 	# download_file_from_google_drive(file_id, destination)
 	# download_file_from_google_drive_confirmed_noscan(file_id, destination)
