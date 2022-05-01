@@ -3,7 +3,6 @@
 # File Extraction based on: https://stackoverflow.com/questions/30887979/i-want-to-create-a-script-for-unzip-tar-gz-file-via-python
 
 import os
-
 import requests
 import tarfile
 
