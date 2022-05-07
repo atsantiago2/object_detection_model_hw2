@@ -1,0 +1,7 @@
+
+Pillow==7.1.2
+requests==2.27.1
+
+
+numpy==1.21.5
+pycocotools-windows==2.0.0.2
