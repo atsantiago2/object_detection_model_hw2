@@ -1,5 +1,12 @@
 Alessandro Santiago
-20113 14870
+2013 14870
+
+# Environment Details
+## Python 3.7
+## cuda enabled pytorch
+## the rest in requirements.txt
+### rqts-win.txt for windows
+### rqts-col.txt for collab
 
 # Pretrained Model Used: 
 ## Link:
