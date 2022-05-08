@@ -5,3 +5,5 @@ requests==2.27.1
 
 numpy==1.21.5
 pycocotools-windows==2.0.0.2
+
+opencv-python==4.5.5
