@@ -150,7 +150,7 @@ def get_model(filename = 'drinks_model_santiago.pth', filesize = 176220000):
 	if filecheck(destination, filesize):
 		print("Data Set Already Downloaded")
 	else:
-		print("Downloading Data Set")
+		print("Downloading Model")
 		download_file_from_google_drive(file_id, destination)
 
 	return True
