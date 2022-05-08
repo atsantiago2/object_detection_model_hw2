@@ -299,5 +299,5 @@ def main():
         # Save Model
         torch.save(model.state_dict(), "drinks_model_santiago.pth")
     
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
