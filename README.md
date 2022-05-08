@@ -1,10 +1,10 @@
 Alessandro Santiago
 2013 14870
 
-# Environment Details
+# Install Requirements
 ## Python 3.7
 ## cuda enabled pytorch
-## the rest in requirements.txt
+## pip3 install -r rqts-****.txt
 ### rqts-win.txt for windows
 ### rqts-col.txt for collab
 ## 
