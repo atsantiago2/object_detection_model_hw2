@@ -129,15 +129,15 @@ import numpy as np
 # from PIL import Image, ImageDraw
 import dataload
 
-data_dir = 'data'
-test_csv_path = os.path.join(data_dir, 'drinks', 'labels_test.csv')
-test_dict,  test_classes  = dataload.get_dataset_dict(train=False)
-
-test_csv_path = os.path.join(data_dir, 'drinks', 'labels_train.csv')
-train_dict, train_classes = dataload.get_dataset_dict(train=True)
 
 def prepare_datasets(ignore_empty_mask = False):
     download_files()
+    data_dir = 'data'
+    # test_csv_path = os.path.join(data_dir, 'drinks', 'labels_test.csv')
+    test_dict,  test_classes  = dataload.get_dataset_dict(train=False)
+
+    # test_csv_path = os.path.join(data_dir, 'drinks', 'labels_train.csv')
+    train_dict, train_classes = dataload.get_dataset_dict(train=True)
 
     if not ignore_empty_mask:
         # Remove No Content Samples
