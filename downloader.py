@@ -5,7 +5,7 @@
 import os
 import requests
 import tarfile
-
+import zipfile
 
 def download_file_from_google_drive(id, destination):
 	URL = "https://drive.google.com/uc?id=" + id + "&export=download&confirm=t"
@@ -44,7 +44,7 @@ def check_create_directory(dpath = 'data'):
 def filecheck(fpath, size):
 	if os.path.exists(fpath):
 		fsize = os.path.getsize(fpath)
-		print("File: \t\t{}\nFile Size:\t{}".format(fpath, fsize))
+		print("\nFile to check: \t\t{}\nFile Size:\t\t{}\nExpected Size:\t\t{}".format(fpath, fsize, size))
 		if fsize >= size:
 			return True
 		else:
@@ -96,11 +96,54 @@ def get_drinks_dataset(filename = 'drinks.tar.gz', filesize = 146820533):
 		return True
 
 
+def get_custom_drinks_dataset(filename = 'drinks.zip', filesize = 146820533, file_id = None):
+	if file_id is None:
+		file_id = '1qDfVcpgpCiQ3p31AtK_I60pa8VjJRJij'
 
-	
-def get_model(filename = 'proj2_model.pth', filesize = 178134000):
-	file_id = '1vrFeocZ7TA88mdfzUoPCCSbMxrHfBwIe'
+	# Check Data Storage Location
+	destination = os.path.join('data', '')
+	check_create_directory(destination)
 
+	# Check Data Set File Status
+	destination = os.path.join('data', filename)
+	if filecheck(destination, 146820000):
+		print("Data Set Already Downloaded")
+	else:
+		print("Downloading Data Set")
+		download_file_from_google_drive(file_id, destination)
+
+	# # Check if Extracted Data Set Exist
+	# # If Drinks Folder EXISTS: Assume Extraction Already Completed
+	# destination_directory = os.path.join('data', 'drinks')
+	# if not os.path.isdir(destination_directory):
+	# 	print("Extracting Drinks to Folder")
+
+	# 	#Change Path to data folder for extract all
+	# 	destination_directory = os.path.join('data')
+	# 	if destination.endswith("tar.gz"):
+	# 		tar = tarfile.open(destination, "r:gz")
+	# 		tar.extractall(destination_directory)
+	# 		tar.close()
+	# 		print("Drinks Data Set Extracted")
+	# 		return True
+	# 	elif destination.endswith("tar"):
+	# 		tar = tarfile.open(destination, "r:")
+	# 		tar.extractall(destination_directory)
+	# 		tar.close()
+	# 		print("Drinks Data Set Extracted")
+	# 		return True
+	# 	else:
+	# 		print("Drinks Extraction Failed")
+	# 		return False
+	# else:
+	# 	print("Drinks Folder Already Exists")
+	# 	return True
+
+
+
+# def get_model(filename = 'drinks_model_santiago.pth', filesize = 178134000):
+def get_model(filename = 'drinks_model_santiago.pth', filesize = 176220000):
+	file_id = '1aj_9V-deou-5SwWIazQPIv38_wvo38fE'
 
 	# Check Data Set File Status
 	destination = filename

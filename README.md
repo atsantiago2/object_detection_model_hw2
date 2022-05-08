@@ -7,12 +7,23 @@ Alessandro Santiago
 ## the rest in requirements.txt
 ### rqts-win.txt for windows
 ### rqts-col.txt for collab
+## 
+
+# Warning
+## Dataset Loader checks if dataset folder exists. NOT whether data actually exist
+
+# Remarks
+## Code based on Pytorch Tutorial Collab Notebook Example
+### LINK: https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
+
+## Code Modified to Support Drinks Dataset
 
 # Pretrained Model Used: 
-## Link:
+## Link: 
 
 # object_detection_model_hw2
 Create and Load Datasets to create an object detection model
+
 
 
 # Other Modules
