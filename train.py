@@ -207,8 +207,8 @@ def prepare_datasets(ignore_empty_mask = False):
             # Combine Masks Into 1 Image 
             mask_list = np.maximum.reduce(mask_list)
 
-            print('\n\n', np.unique(mask_list))
-            print(mask_list.shape)
+            # print('\n\n', np.unique(mask_list))
+            # print(mask_list.shape)
 
             # Create Image Mask into file
             im = Image.fromarray(mask_list)
@@ -216,11 +216,11 @@ def prepare_datasets(ignore_empty_mask = False):
             imfp = os.path.join('data', 'drinks_masks')
             imfp = img_path.replace(os.path.join('data','drinks'), imfp)
             imfp = imfp.replace('.jpg', '.png')
-            print(imfp)
+            # print(imfp)
 
             im.save(imfp)
             
-            print(im)
+            # print(im)
 
             
 TRAIN_BATCH_SIZE = 4
@@ -279,7 +279,7 @@ def main():
 
     if modelfile_exist:
         '''If Model File Already Exists, Do not Train anymore'''
-        print('Model File Exists\n SKIPPING Training, Direct to Evaluation')
+        print('\n\nModel File Exists\n SKIPPING Training, Direct to Evaluation')
         evaluate(model, data_loader_test, device=device)
         
     else:
