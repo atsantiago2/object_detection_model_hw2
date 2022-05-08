@@ -4,7 +4,7 @@
 import os
 import numpy as np
 import torch
-from PIL import Image
+from PIL import Image, ImageDraw
 
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
@@ -126,7 +126,7 @@ def download_files():
 
 import os
 import numpy as np
-from PIL import Image, ImageDraw
+# from PIL import Image, ImageDraw
 import dataload
 
 data_dir = 'data'
@@ -279,7 +279,8 @@ def main():
 
     if modelfile_exist:
         '''If Model File Already Exists, Do not Train anymore'''
-        print('Model File Exists\n SKIPPING Training')
+        print('Model File Exists\n SKIPPING Training, Direct to Evaluation')
+        evaluate(model, data_loader_test, device=device)
         
     else:
         print('Model File Does NOT Exist\n Training Model')
@@ -298,6 +299,7 @@ def main():
 
         # Save Model
         torch.save(model.state_dict(), "drinks_model_santiago.pth")
-    
+
+
 if __name__ == "__main__":
     main()
