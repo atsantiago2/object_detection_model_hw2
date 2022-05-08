@@ -121,7 +121,7 @@ def get_transform(train):
 import downloader
 def download_files():
     downloader.get_drinks_dataset()
-    downloader.get_model()
+    # downloader.get_model()
 
 
 import os
