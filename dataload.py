@@ -44,7 +44,7 @@ def get_dataset_dict(train):
 		# target[filename] 
 		target[filename] = d_temp
 
-	print('Total Unique Masks', len(unique_classes))
-	print('Unique Masks', unique_classes)
+	# print('Total Unique Masks', len(unique_classes))
+	# print('Unique Masks', unique_classes)
 	# target = d1
 	return target, unique_classes

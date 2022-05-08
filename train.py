@@ -145,7 +145,7 @@ def prepare_datasets(ignore_empty_mask = False):
         for key, val in train_dict.items():
             # print(len(val['masks']))
             if len(val['masks']) == 0:
-                print(key)
+                # print(key)
                 keylist.append(key)
     
         print('Empty Masks Ignored\n', keylist)
