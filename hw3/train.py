@@ -411,4 +411,6 @@ if __name__ == "__main__":
     # trainer = Trainer(accelerator=args.accelerator, devices=args.devices,
     #                   max_epochs=args.max_epochs, precision=16 if args.accelerator == 'gpu' else 32,)
     # trainer.fit(model, datamodule=datamodule)
+
+    
     wandb.finish()
