@@ -430,7 +430,6 @@ if __name__ == "__main__":
                             )
     datamodule.prepare_data()
 
-
     data = iter(datamodule.train_dataloader()).next()
     patch_dim = data[0].shape[-1]
     seqlen = data[0].shape[-2]
@@ -450,14 +449,18 @@ if __name__ == "__main__":
     )
     idx_to_class = {v: k for k, v in CLASS_TO_IDX.items()}
 
-    try:
-        model = model.load_from_checkpoint(os.path.join(args.path, "checkpoints", "trans-kws-best-acc.ckpt"))
-    except Exception as e:
-        print('Not Able to Load Prev Checkpoint')
 
     model = LitTransformer(num_classes=args.num_classes, lr=args.lr, epochs=args.max_epochs, 
                             depth=args.depth, embed_dim=args.embed_dim, head=args.num_heads,
                             patch_dim=patch_dim, seqlen=seqlen)
+
+
+    try:
+        print("*"*25+"\nTrying to Load Model from Checkpoint:")
+        model = model.load_from_checkpoint(os.path.join(args.path, "checkpoints", "trans-kws-best-acc.ckpt"))
+    except Exception as e:
+        print('Not Able to Load Prev Checkpoint')
+        print("Exception:", e)
 
 
 
