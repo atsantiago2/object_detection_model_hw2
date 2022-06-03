@@ -45,7 +45,8 @@ def get_args():
     parser.add_argument("--win-length", type=int, default=None)
     parser.add_argument("--hop-length", type=int, default=512)
     parser.add_argument("--wav-file", type=str, default=None)
-    parser.add_argument("--checkpoint", type=str, default="https://github.com/roatienza/Deep-Learning-Experiments/releases/download/models/resnet18-kws-best-acc.pt")
+    # parser.add_argument("--checkpoint", type=str, default="https://github.com/roatienza/Deep-Learning-Experiments/releases/download/models/resnet18-kws-best-acc.pt")
+    parser.add_argument("--checkpoint", type=str, default="data/speech_commands/checkpoints/trans-kws-best-acc.pt")
     parser.add_argument("--gui", default=False, action="store_true")
     parser.add_argument("--rpi", default=False, action="store_true")
     parser.add_argument("--threshold", type=float, default=0.6)
@@ -108,7 +109,7 @@ if __name__ == "__main__":
                                                      power=2.0)
     if not args.gui:
         mel = ToTensor()(librosa.power_to_db(transform(waveform).squeeze().numpy(), ref=np.max))
-        mel = mel.unsqueeze(0)
+        # mel = mel.unsqueeze(0)
 
         pred = torch.argmax(scripted_module(mel), dim=1)
         print(f"Ground Truth: {label}, Prediction: {idx_to_class[pred.item()]}")
@@ -145,12 +146,12 @@ if __name__ == "__main__":
             mel = librosa.power_to_db(mel, ref=np.max).tolist()
             
             mel = torch.FloatTensor(mel)
-            mel = mel.unsqueeze(0)
+            # mel = mel.unsqueeze(0)
 
         else:
             waveform = torch.from_numpy(waveform).unsqueeze(0)
             mel = ToTensor()(librosa.power_to_db(transform(waveform).squeeze().numpy(), ref=np.max))
-        mel = mel.unsqueeze(0)
+        # mel = mel.unsqueeze(0)
         pred = scripted_module(mel)
         pred = torch.functional.F.softmax(pred, dim=1)
         max_prob =  pred.max()
