@@ -1,5 +1,5 @@
 import torch
-import torchvision
+import torchaudio, torchvision
 
 from argparse import ArgumentParser
 from pytorch_lightning import LightningModule, Trainer, LightningDataModule
@@ -8,31 +8,23 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from torchmetrics.functional import accuracy
 from einops import rearrange
 from torch import nn
-from torchvision.datasets.cifar import CIFAR10
 
 
-import torchaudio
+from torchvision.transforms import ToTensor
 from torchaudio.datasets import SPEECHCOMMANDS
 from torchaudio.datasets.speechcommands import load_speechcommands_item
 from pytorch_lightning import LightningModule, Trainer, LightningDataModule, Callback
 
 
-from torchvision.transforms import ToTensor
+
 import librosa
 import numpy as np
-
 import matplotlib.pyplot as plt 
 
-
-
-import torch
-import torchaudio, torchvision
 import os
-from pytorch_lightning import LightningModule, Trainer, LightningDataModule, Callback
+
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
-from torchmetrics.functional import accuracy
-
 
 class Attention(nn.Module):
     def __init__(self, dim, num_heads=8, qkv_bias=False):
@@ -190,6 +182,7 @@ class LitTransformer(LightningModule):
 
 
 
+
 class SilenceDataset(SPEECHCOMMANDS):
     def __init__(self, root):
         super(SilenceDataset, self).__init__(root, subset='training')
@@ -248,9 +241,9 @@ class LitCifar10(LightningDataModule):
     def prepare_data(self):
         print('_'*20, 'datamodule prepare data')
         #________________________________
+        self.train_dataset = torchaudio.datasets.SPEECHCOMMANDS(self.path, download=True,subset='training')
         silence_dataset = SilenceDataset(self.path)
         unknown_dataset = UnknownDataset(self.path)
-        self.train_dataset = torchaudio.datasets.SPEECHCOMMANDS(self.path, download=True,subset='training')
         # self.train_set = CIFAR10(root='./data', train=True,download=True, transform=torchvision.transforms.ToTensor())
         self.train_set = torch.utils.data.ConcatDataset([self.train_dataset, silence_dataset, unknown_dataset])
 
@@ -348,7 +341,6 @@ class LitCifar10(LightningDataModule):
         return x, labels
 
 
-
 DEFAULT_BATCH_SIZE = 128
 # DEFAULT_BATCH_SIZE = 4 #for debugging
 
@@ -400,48 +392,30 @@ def get_args():
     
     args = parser.parse_args("")
     return args
-args = get_args()
 
 import os
-CLASSES = ['silence', 'unknown', 'backward', 'bed', 'bird', 'cat', 'dog', 'down', 'eight', 'five', 'follow',
-            'forward', 'four', 'go', 'happy', 'house', 'learn', 'left', 'marvin', 'nine', 'no',
-            'off', 'on', 'one', 'right', 'seven', 'sheila', 'six', 'stop', 'three',
-            'tree', 'two', 'up', 'visual', 'wow', 'yes', 'zero']
-
-# make a dictionary from CLASSES to integers
-CLASS_TO_IDX = {c: i for i, c in enumerate(CLASSES)}
-
-if not os.path.exists(args.path):
-    os.makedirs(args.path, exist_ok=True)
 
 
-
-def plot_waveform(waveform, sample_rate, title="Waveform", xlim=None, ylim=None):
-    waveform = waveform.numpy()
-
-    num_channels, num_frames = waveform.shape
-    time_axis = torch.arange(0, num_frames) / sample_rate
-
-    figure, axes = plt.subplots(num_channels, 1)
-    if num_channels == 1:
-        axes = [axes]
-    for c in range(num_channels):
-        axes[c].plot(time_axis, waveform[c], linewidth=1)
-        axes[c].grid(True)
-        if num_channels > 1:
-            axes[c].set_ylabel(f'Channel {c+1}')
-        if xlim:
-            axes[c].set_xlim(xlim)
-        if ylim:
-            axes[c].set_ylim(ylim)
-    figure.suptitle(title)
-    plt.show(block=False)
 
 
 
 if __name__ == "__main__":
 
     args = get_args()
+
+
+    CLASSES = ['silence', 'unknown', 'backward', 'bed', 'bird', 'cat', 'dog', 'down', 'eight', 'five', 'follow',
+                'forward', 'four', 'go', 'happy', 'house', 'learn', 'left', 'marvin', 'nine', 'no',
+                'off', 'on', 'one', 'right', 'seven', 'sheila', 'six', 'stop', 'three',
+                'tree', 'two', 'up', 'visual', 'wow', 'yes', 'zero']
+
+    # make a dictionary from CLASSES to integers
+    CLASS_TO_IDX = {c: i for i, c in enumerate(CLASSES)}
+
+    if not os.path.exists(args.path):
+        os.makedirs(args.path, exist_ok=True)
+
+
 
     datamodule = LitCifar10(batch_size=args.batch_size,
                             num_workers=args.num_workers * args.devices,
@@ -455,6 +429,7 @@ if __name__ == "__main__":
                             class_dict=CLASS_TO_IDX
                             )
     datamodule.prepare_data()
+
 
     data = iter(datamodule.train_dataloader()).next()
     patch_dim = data[0].shape[-1]
