@@ -17,6 +17,10 @@ accelerate
 
 wandb
 
+pysimplegui
+sounddevice
+validators
+
 # sudo apt-get install libsndfile-dev
 # sndfile
 
