@@ -112,7 +112,7 @@ class LitTransformer(LightningModule):
     def __init__(self, num_classes=10, lr=0.001, max_epochs=30, depth=12, embed_dim=64,
                  head=4, patch_dim=192, seqlen=16, **kwargs):
         super().__init__()
-        print('_'*20, 'init')
+        # print('_'*20, 'init')
         self.save_hyperparameters()
         self.encoder = Transformer(dim=embed_dim, num_heads=head, num_blocks=depth, mlp_ratio=4.,
                                    qkv_bias=False, act_layer=nn.GELU, norm_layer=nn.LayerNorm)
@@ -125,7 +125,7 @@ class LitTransformer(LightningModule):
 
 
     def reset_parameters(self):
-        print('_'*20, 'reset param')
+        # print('_'*20, 'reset param')
         init_weights_vit_timm(self)
     
 
@@ -274,7 +274,7 @@ class LitCifar10(LightningDataModule):
 
 
     def train_dataloader(self):
-        print('_'*20, 'datamodule train dataloader')
+        # print('_'*20, 'datamodule train dataloader')
         return torch.utils.data.DataLoader( self.train_set, 
                                             batch_size=self.batch_size,
                                             num_workers=self.num_workers,
@@ -283,7 +283,7 @@ class LitCifar10(LightningDataModule):
                                             collate_fn=self.collate_fn)
 
     def test_dataloader(self):
-        print('_'*20, 'datamodule test dataload')
+        # print('_'*20, 'datamodule test dataload')
         return torch.utils.data.DataLoader( self.test_set, 
                                             batch_size=self.batch_size,
                                             num_workers=self.num_workers, 
@@ -292,7 +292,7 @@ class LitCifar10(LightningDataModule):
                                             collate_fn=self.collate_fn)
 
     def val_dataloader(self):
-        print('_'*20, 'kws val dataloader')
+        # print('_'*20, 'kws val dataloader')
         return torch.utils.data.DataLoader( self.val_dataset,
                                             batch_size=self.batch_size,
                                             num_workers=self.num_workers,
@@ -443,10 +443,14 @@ if __name__ == "__main__":
         dirpath=os.path.join(args.path, "checkpoints"),
         filename="trans-kws-best-acc",
         save_top_k=1,
+        every_n_epochs=1,
         verbose=True,
         monitor='test_acc',
         mode='max',
+        save_last=True,
     )
+    # model_checkpoint.STARTING_VERSION = 0
+
     idx_to_class = {v: k for k, v in CLASS_TO_IDX.items()}
 
 
@@ -457,7 +461,9 @@ if __name__ == "__main__":
 
     try:
         print("*"*25+"\nTrying to Load Model from Checkpoint:")
-        model = model.load_from_checkpoint(os.path.join(args.path, "checkpoints", "trans-kws-best-acc.ckpt"))
+        model = model.load_from_checkpoint(os.path.join(args.path, "checkpoints", 
+                "trans-kws-best-acc.ckpt"))
+                # "best.ckpt"))
     except Exception as e:
         print('Not Able to Load Prev Checkpoint')
         print("Exception:", e)
@@ -472,8 +478,13 @@ if __name__ == "__main__":
                         )
 
     trainer.fit(model, datamodule=datamodule)
-    model = model.load_from_checkpoint(os.path.join(
-    args.path, "checkpoints", "trans-kws-best-acc.ckpt"))
+
+
+    # Load most accurate checkpoint
+    # model = model.load_from_checkpoint(os.path.join(
+    #                     args.path, "checkpoints", "last.ckpt"))
+    trainer.save_checkpoint(os.path.join(
+                        args.path, "checkpoints", "best.ckpt"))
     model.eval()
 
 
@@ -481,11 +492,11 @@ if __name__ == "__main__":
 
 
     script = model.to_torchscript()
-    # Load most accurate checkpoint
-    model_path = os.path.join(args.path, "checkpoints",
-                            "trans-kws-best-acc.pt")
 
     # save for use in production environment
+    # model_path = os.path.join(args.path, "checkpoints","trans-kws-best-acc.pt")
+    model_path = "trans-kws-best-acc.pt"
+
     torch.jit.save(script, model_path)
 
 
