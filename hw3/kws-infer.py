@@ -44,6 +44,7 @@ def get_args():
     parser.add_argument("--n-mels", type=int, default=128)
     parser.add_argument("--win-length", type=int, default=None)
     parser.add_argument("--hop-length", type=int, default=512)
+    # parser.add_argument("--hop-length", type=int, default=334)
     parser.add_argument("--wav-file", type=str, default=None)
     # parser.add_argument("--checkpoint", type=str, default="https://github.com/roatienza/Deep-Learning-Experiments/releases/download/models/resnet18-kws-best-acc.pt")
     parser.add_argument("--checkpoint", type=str, default="trans-kws-best-acc.pt")
@@ -131,8 +132,10 @@ if __name__ == "__main__":
         event, values = window.read(100)
         if event == sg.WIN_CLOSED:
             break
-        
+        # print( '0', end='\r')
+        print( '.')
         waveform = sd.rec(sample_rate).squeeze()
+        # print( '.', end='\r')
         
         sd.wait()
         if waveform.max() > 1.0:

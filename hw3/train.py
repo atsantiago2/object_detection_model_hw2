@@ -481,8 +481,8 @@ if __name__ == "__main__":
 
 
     # Load most accurate checkpoint
-    # model = model.load_from_checkpoint(os.path.join(
-    #                     args.path, "checkpoints", "last.ckpt"))
+    model = model.load_from_checkpoint(os.path.join(
+                        args.path, "checkpoints", "trans-kws-best-acc.ckpt"))
     trainer.save_checkpoint(os.path.join(
                         args.path, "checkpoints", "best.ckpt"))
     model.eval()
